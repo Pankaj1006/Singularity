@@ -1,0 +1,115 @@
+singularity:
+~~~~~~~~~~~~
+
+01:Singularity is a free, cross-platform, and open-source computer program.Singularity is a container platform. It allows you to create and run containers that package up pieces of software in a portable and reproducible way. You can build a container using Singularity on your work environment and then run it on many of the largest HPC clusters in the world or even in the cloud environment.
+
+02:A Unix operating system is broken into two primary components, the kernel space, and the user space. The Kernel talks to the hardware and provides core system features. The user space is the environment that most people are most familiar with. It is where applications, libraries, and system services run.
+
+Traditionally you use an operating system that has a fixed combination of kernel and user space. If you have access to a machine running CentOS then you cannot install software that was packaged for Ubuntu on it,because the user space of these distributions is not compatible. 
+
+It can also be very difficult to install multiple versions of the same software.Containers change the user space into a swappable component. that means the entire user-space portion of a Linux operating system can be independent of whether your system is running CentOS, Fedora, etc. thats why we use container env.
+
+03:
+Reproducible Research
+~~~~~~~~~~~~~~~~~~~~~
+Scientists and researchers can package their entire computing environment, including the software, libraries, and dependencies, into a Singularity container.
+
+Portability
+~~~~~~~~~~~
+Singularity containers are designed to be highly portable. You can create a Singularity container on one system and run it on another without worrying about compatibility issues. 
+
+Isolation
+~~~~~~~~~
+Singularity containers provide process and filesystem isolation. This means that processes running within the container are isolated from the host system, reducing the risk factors.
+
+Security
+~~~~~~~~
+Singularity containers are designed with security in mind. They do not require elevated privileges to run.This can be important for shared HPC clusters.
+
+HPC and Supercomputing
+~~~~~~~~~~~~~~~~~~~~~~
+Singularity is commonly used in high-performance computing and supercomputing environments to package and distribute scientific applications and simulations. 
+
+Cloud and Cluster Computing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+They enable users to create consistent environments for their applications across various cloud providers.
+
+04: Image file in singularity:
+there is a two way 1st- we can pull the image file from an external resource like the Container Library or Docker Hub.
+
+or- we can build image file from scratch.
+To build image file from scratch we have two major ways
+1st- by using sandbox directory [To build into a sandbox (container in a directory) use the build --sandbox command]
+2nd- we can write a singularity defination file:
+
+05: In this example, the header tells Singularity to use a base Ubuntu 16.04 image from the Container Library.
+•	The %post section executes within the container at build time after the base OS has been installed. The %post section is therefore the place to perform installations of new applications.
+•	The %environment section defines some environment variables that will be available to the container at runtime.
+•	The %runscript section defines actions for the container to take when it is executed.
+•	And finally, the %labels section allows for custom metadata to be added to the container.
+
+06: Singularity can make use of public images available from the Docker Hub. By specifying the docker:// URI for an image that has already been located, Singularity can pull it. we can also pull the private images from the docker hub by giving credential of the docker hub.
+
+
+07: Remotely Hosted Images~
+The build command is used to create Singularity containers.
+
+Building Containers Remotely~
+By making use of the Sylabs Cloud Remote Builder, it is possible to build SIF containers remotely from images hosted at Docker Hub.
+
+Locally Available Images: Stored Archives~
+Singularity containers can also be built at the command line from Docker images stored locally as tar files. 
+
+
+08: now let see what are the major different between singularity file and docker file: 
+
+Bootstrap
+~~~~~~~~~
+in singularity You are free to choose between library (Our cloud library), docker , shub and oras.but in docker file you Can only bootstrap from Docker Hub.
+
+Setup
+~~~~~
+singularity support Commands that run outside the container by using setup hedear.but in docker file we doesnt have any.
+
+apps
+~~~~ 
+Allows you to install internal modules based on the concept
+of SCIF-apps(Scientific Filesystem).
+
+09:The fakeroot feature (commonly referred as rootless mode) allows an unprivileged user to run a container as a “fake root” user by leveraging user namespace UID/GID mapping.
+A “fake root” user has almost the same administrative rights as root but only inside the container and the requested namespaces, which means that this user:
+•	can set different user/group ownership for files or directories they own
+•	can change user/group identity with su/sudo commands
+•	has full privileges inside the requested namespaces (network, ipc, uts)
+
+
+
+10:Restrictions are also applied to networking, if singularity is executed without the --net flag, With --net the “fake root” user has full privileges in a dedicated container network. Inside the container network they can bind on privileged ports below 1024.
+
+The --fakeroot option is available with the following singularity commands:
+shell
+exec
+run
+build
+
+11:Cloud Library~
+The Sylabs Cloud Library is the place to push your containers to the cloud so other users can pull, verify, and use them. The Sylabs Cloud also provides a Remote Builder, allowing you to build containers on a secure remote service.This is convenient so that you can build containers on systems where you do not have root privileges.
+
+12:Singularity Support~
+OCI Runtime Support
+~~~~~~~~~~~~~~~~~~~
+OCI is an acronym for the Open Containers Initiative - an independent organization whose mandate is to develop open standards relating to containerization.oci command group receives attention here; specifically:
+•	Mounting and unmounting OCI filesystem bundles
+•	Creating OCI compliant container instances
+
+Cgroup Support (Limiting container resources with cgroups)
+~~~~~~~~~~~~~~
+The --apply-cgroups option can only be used with root privileges.
+•	Limiting memory
+•	Limiting CPU
+•	Limiting IO
+•	Limiting device access
+
+GPU Support
+~~~~~~~~~~~
+Singularity natively supports running application containers that use NVIDIA’s CUDA GPU compute framework, or AMD’s ROCm solution. This allows easy access to users of GPU-enabled machine learning frameworks such as tensorflow, regardless of the host operating system. 
