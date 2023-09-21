@@ -1,0 +1,3 @@
+https://singularity-tutorial.github.io/01-installation/
+https://apptainer.org/admin-docs/master/installation.html
+https://github.com/apptainer/singularity/blob/master/INSTALL.md
